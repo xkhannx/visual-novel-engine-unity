@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2bb91ab75545d1649b3223822940d587, type: 3}
-  m_Name: MainCharacter
+  m_Name: Pomin
   m_EditorClassIdentifier: 
-  characterName: Yeldana
+  characterName: "\u041F\u043E\u043C\u0438\u043D"
   portrait: {fileID: 21300000, guid: 22b0c18ca0b736b429cd129e01701923, type: 3}
   stats:
   - Success
@@ -33,3 +33,4 @@ MonoBehaviour:
   - Jiho_relation
   - Jiho_love
   - Jiho_hate
+  money: 0

@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b763d12fe63e2e8498ad475d4b6124fd, type: 3}
   m_Name: Businessman
   m_EditorClassIdentifier: 
+  statName: "\u0411\u0438\u0437\u043D\u0435\u0441\u043C\u0435\u043D"
   value: 0

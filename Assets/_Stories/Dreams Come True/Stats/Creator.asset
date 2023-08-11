@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b763d12fe63e2e8498ad475d4b6124fd, type: 3}
   m_Name: Creator
   m_EditorClassIdentifier: 
+  statName: "\u0422\u0432\u043E\u0440\u0435\u0446"
   value: 0
