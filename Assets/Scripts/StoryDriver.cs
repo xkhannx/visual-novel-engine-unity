@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using XNode;
@@ -17,11 +16,15 @@ public class StoryDriver : MonoBehaviour
     [Header("Windows")]
     public RectTransform dialogBubble;
     public RectTransform dialogShiftedUp;
+    public RectTransform dialogAuthor;
     [Header("Buttons")]
     public Button nextButton;
     public Button[] choiceButtons;
 
     Vector2 dialogPos;
+    Vector2 authorPos;
+    Vector2 authorSize;
+    Vector2 dialogSize;
     Vector2 multipleChoicePos;
 
     string statUpdates = "";
@@ -29,6 +32,11 @@ public class StoryDriver : MonoBehaviour
     void Start()
     {
         dialogPos = dialogBubble.anchoredPosition;
+        dialogSize = dialogBubble.sizeDelta;
+
+        authorPos = dialogAuthor.anchoredPosition;
+        authorSize = dialogAuthor.sizeDelta;
+        
         multipleChoicePos = dialogShiftedUp.anchoredPosition;
 
         StoryStartNode startingNode = null;
@@ -57,6 +65,7 @@ public class StoryDriver : MonoBehaviour
             nextButton.gameObject.SetActive(false);
             return;
         }
+
 
         if (graph.current.GetType() == typeof(DialogNode))
         {
@@ -146,12 +155,15 @@ public class StoryDriver : MonoBehaviour
     private void NODE_RegularDialog()
     {
         DialogNode node = (DialogNode)graph.current;
-
-        portrait.sprite = node.character.portrait;
-        speakerName.text = node.character.characterName;
         dialogText.text = node.line;
 
-        UpdateDialogPosition(node.answers.Length > 0);
+        if (node.character != null)
+        {
+            portrait.sprite = node.character.portrait;
+            speakerName.text = node.character.characterName;
+        }
+
+        UpdateDialogPosition();
 
         ShowStatUpdates();
     }
@@ -171,14 +183,18 @@ public class StoryDriver : MonoBehaviour
         }
     }
 
-    void UpdateDialogPosition(bool multiple)
+    void UpdateDialogPosition()
     {
         DialogNode node = (DialogNode)graph.current;
 
-        if (multiple)
+        if (node.answers.Length > 0)
         {
             dialogBubble.anchoredPosition = multipleChoicePos;
+            dialogBubble.sizeDelta = dialogSize;
+
             nextButton.gameObject.SetActive(false);
+            speakerName.transform.parent.gameObject.SetActive(true);
+            portrait.gameObject.SetActive(true);
 
             PrepareButton(0, node.answers[0].text);
             PrepareButton(1, node.answers[1].text);
@@ -186,12 +202,17 @@ public class StoryDriver : MonoBehaviour
             if (node.answers.Length > 2)
             {
                 PrepareButton(2, node.answers[2].text);
-            } 
+            }
         }
         else
         {
-            dialogBubble.anchoredPosition = dialogPos;
+            dialogBubble.anchoredPosition = node.character != null ? dialogPos : authorPos;
+            dialogBubble.sizeDelta = node.character != null ? dialogSize : authorSize;
+
             nextButton.gameObject.SetActive(true);
+            speakerName.transform.parent.gameObject.SetActive(node.character != null);
+            portrait.gameObject.SetActive(node.character != null);
+
             foreach (var but in choiceButtons)
             {
                 but.gameObject.SetActive(false);

@@ -216,7 +216,10 @@ MonoBehaviour:
       _node: {fileID: -8404535337928341172}
       _typeQualifiedName: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
-      connections: []
+      connections:
+      - fieldName: enter
+        node: {fileID: 518302587585588610}
+        reroutePoints: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
@@ -676,7 +679,10 @@ MonoBehaviour:
       _node: {fileID: -4948678118048499578}
       _typeQualifiedName: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
-      connections: []
+      connections:
+      - fieldName: exit
+        node: {fileID: 3762811250133624013}
+        reroutePoints: []
       _direction: 0
       _connectionType: 0
       _typeConstraint: 0
@@ -1288,7 +1294,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 280ec9ab5ffad3841ad37be875725cd0, type: 3}
-  m_Name: Scene 3.
+  m_Name: Scene 3
   m_EditorClassIdentifier: 
   nodes:
   - {fileID: 1479834277073719710}
@@ -1331,7 +1337,7 @@ MonoBehaviour:
   - {fileID: 4615025603497807377}
   - {fileID: 8098385591915571182}
   - {fileID: 5014751230734499824}
-  current: {fileID: -4948678118048499578}
+  current: {fileID: -8404535337928341172}
 --- !u!114 &363726599984380139
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1417,7 +1423,10 @@ MonoBehaviour:
       _node: {fileID: 518302587585588610}
       _typeQualifiedName: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
-      connections: []
+      connections:
+      - fieldName: exit
+        node: {fileID: -8404535337928341172}
+        reroutePoints: []
       _direction: 0
       _connectionType: 0
       _typeConstraint: 0
@@ -1922,7 +1931,10 @@ MonoBehaviour:
       _node: {fileID: 3762811250133624013}
       _typeQualifiedName: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
-      connections: []
+      connections:
+      - fieldName: enter
+        node: {fileID: -4948678118048499578}
+        reroutePoints: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0

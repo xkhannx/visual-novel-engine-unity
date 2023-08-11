@@ -286,7 +286,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 280ec9ab5ffad3841ad37be875725cd0, type: 3}
-  m_Name: Scene 2.
+  m_Name: Scene 2
   m_EditorClassIdentifier: 
   nodes:
   - {fileID: -5765987769393255716}

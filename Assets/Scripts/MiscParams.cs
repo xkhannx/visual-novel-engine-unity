@@ -13,28 +13,6 @@ public enum Emotions
     Shame
 }
 
-public enum Stats_ENUM
-{
-    Success,
-    Businessman,
-    Creator
-}
-
-public enum Lovers
-{
-    Kim,
-    Sonmi,
-    Minsu,
-    Kyurin,
-    Jiho
-}
-
-public enum Relations
-{
-    Love,
-    Friendship
-}
-
 [Serializable]
 public struct Choice
 {
