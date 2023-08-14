@@ -1547,7 +1547,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bc6a67da21eed641a6ec7f11984ba83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  graph: {fileID: 11400000, guid: 7374ae3181347274a8214e08400f0541, type: 2}
+  convos: {fileID: 11400000, guid: 2782d807cd62f704eb72f2655fddc35a, type: 2}
   background: {fileID: 328188284}
   portrait: {fileID: 1374541603}
   speakerName: {fileID: 1990128253}

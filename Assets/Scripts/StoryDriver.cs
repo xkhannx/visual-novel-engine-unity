@@ -6,7 +6,8 @@ using XNode;
 
 public class StoryDriver : MonoBehaviour
 {
-    public StoryGraph graph;
+    public ConversationsSO convos;
+    StoryGraph curConvo;
     [Header("References")]
     public Image background;
     public Image portrait;
@@ -29,6 +30,7 @@ public class StoryDriver : MonoBehaviour
 
     string statUpdates = "";
     Coroutine statUpdatePopupCor;
+    int curConvoIndex = 0;
     void Start()
     {
         dialogPos = dialogBubble.anchoredPosition;
@@ -36,11 +38,18 @@ public class StoryDriver : MonoBehaviour
 
         authorPos = dialogAuthor.anchoredPosition;
         authorSize = dialogAuthor.sizeDelta;
-        
+
         multipleChoicePos = dialogShiftedUp.anchoredPosition;
 
+        InitStory();
+    }
+
+    private void InitStory()
+    {
+        curConvo = convos.conversations[curConvoIndex];
+
         StoryStartNode startingNode = null;
-        foreach (Node node in graph.nodes)
+        foreach (Node node in curConvo.nodes)
         {
             if (node.GetType() == typeof(StoryStartNode))
             {
@@ -54,44 +63,49 @@ public class StoryDriver : MonoBehaviour
             background.sprite = startingNode.background;
         }
 
-        graph.current = startingNode.GetOutputPort("exit").Connection.node;
+        curConvo.current = startingNode.GetOutputPort("exit").Connection.node;
         ShowDialog();
     }
 
     void ShowDialog()
     {
-        if (graph.current.GetType() == typeof(StoryEndNode))
+        if (curConvo.current.GetType() == typeof(StoryEndNode))
         {
             nextButton.gameObject.SetActive(false);
+            curConvoIndex++;
+            if (curConvoIndex < convos.conversations.Count && convos.conversations[curConvoIndex] != null)
+            {
+                InitStory();
+            }
             return;
         }
 
 
-        if (graph.current.GetType() == typeof(DialogNode))
+        if (curConvo.current.GetType() == typeof(DialogNode))
         {
             NODE_RegularDialog();
             return;
         }
 
-        if (graph.current.GetType() == typeof(UpdateStatNode))
+        if (curConvo.current.GetType() == typeof(UpdateStatNode))
         {
             NODE_UpdateStats();
             return;
         }
 
-        if (graph.current.GetType() == typeof(CheckStatNode))
+        if (curConvo.current.GetType() == typeof(CheckStatNode))
         {
             NODE_CheckStats();
             return;
         }
 
-        if (graph.current.GetType() == typeof(UpdateMarkerNode))
+        if (curConvo.current.GetType() == typeof(UpdateMarkerNode))
         {
             NODE_UpdateMarker();
             return;
         }
 
-        if (graph.current.GetType() == typeof(CheckMarkerNode))
+        if (curConvo.current.GetType() == typeof(CheckMarkerNode))
         {
             NODE_CheckMarker();
             return;
@@ -100,15 +114,15 @@ public class StoryDriver : MonoBehaviour
 
     private void NODE_CheckMarker()
     {
-        CheckMarkerNode node = (CheckMarkerNode)graph.current;
+        CheckMarkerNode node = (CheckMarkerNode)curConvo.current;
 
         if (node.marker.received)
         {
-            graph.current = node.GetOutputPort("happened").Connection.node;
+            curConvo.current = node.GetOutputPort("happened").Connection.node;
         }
         else
         {
-            graph.current = node.GetOutputPort("didNotHappen").Connection.node;
+            curConvo.current = node.GetOutputPort("didNotHappen").Connection.node;
         }
 
         ShowDialog();
@@ -116,23 +130,23 @@ public class StoryDriver : MonoBehaviour
 
     private void NODE_UpdateMarker()
     {
-        UpdateMarkerNode node = (UpdateMarkerNode)graph.current;
+        UpdateMarkerNode node = (UpdateMarkerNode)curConvo.current;
         node.marker.received = true;
 
-        graph.current = graph.current.GetOutputPort("exit").Connection.node;
+        curConvo.current = curConvo.current.GetOutputPort("exit").Connection.node;
         ShowDialog();
     }
 
     private void NODE_CheckStats()
     {
-        CheckStatNode node = (CheckStatNode)graph.current;
+        CheckStatNode node = (CheckStatNode)curConvo.current;
 
         if (node.stat.value >= node.threshold)
         {
-            graph.current = node.GetOutputPort("greaterOrEqual").Connection.node;
+            curConvo.current = node.GetOutputPort("greaterOrEqual").Connection.node;
         } else
         {
-            graph.current = node.GetOutputPort("less").Connection.node;
+            curConvo.current = node.GetOutputPort("less").Connection.node;
         }
 
         ShowDialog();
@@ -140,7 +154,7 @@ public class StoryDriver : MonoBehaviour
 
     private void NODE_UpdateStats()
     {
-        UpdateStatNode node = (UpdateStatNode)graph.current;
+        UpdateStatNode node = (UpdateStatNode)curConvo.current;
         node.stat.value += node.change;
         if (statUpdates != "")
         {
@@ -148,13 +162,13 @@ public class StoryDriver : MonoBehaviour
         }
         statUpdates += node.stat.statName + ": " + node.change.ToString();
 
-        graph.current = graph.current.GetOutputPort("exit").Connection.node;
+        curConvo.current = curConvo.current.GetOutputPort("exit").Connection.node;
         ShowDialog();
     }
 
     private void NODE_RegularDialog()
     {
-        DialogNode node = (DialogNode)graph.current;
+        DialogNode node = (DialogNode)curConvo.current;
         dialogText.text = node.line;
 
         if (node.character != null)
@@ -185,7 +199,7 @@ public class StoryDriver : MonoBehaviour
 
     void UpdateDialogPosition()
     {
-        DialogNode node = (DialogNode)graph.current;
+        DialogNode node = (DialogNode)curConvo.current;
 
         if (node.answers.Length > 0)
         {
@@ -229,20 +243,20 @@ public class StoryDriver : MonoBehaviour
     // Button functions
     public void Next()
     {
-        if (graph.current.GetType() == typeof(StoryEndNode))
+        if (curConvo.current.GetType() == typeof(StoryEndNode))
         {
             return;
         }
 
-        graph.current = graph.current.GetOutputPort("exit").Connection.node;
+        curConvo.current = curConvo.current.GetOutputPort("exit").Connection.node;
         ShowDialog();
     }
 
     public void MakeChoice(int _choice)
     {
-        Node node = graph.current.GetPort("answers " + _choice.ToString()).Connection.node;
+        Node node = curConvo.current.GetPort("answers " + _choice.ToString()).Connection.node;
         Debug.Log("you selected " + node.name);
-        graph.current = node;
+        curConvo.current = node;
         ShowDialog();
     }
 
